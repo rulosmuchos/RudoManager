@@ -363,3 +363,6 @@ MigrationBackup/
 FodyWeavers.xsd
 
 dist/
+build/
+main.spec
+main.pyproject.qtds
