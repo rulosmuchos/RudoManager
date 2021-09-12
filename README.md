@@ -1,6 +1,6 @@
 # RudoManager
 Animation Studio Pipeline Tool
-RM is a version tracker, version generator, pipeline CVS reader
+RM is a version tracker, version generator, pipeline CVS reader, older versions backup and project file launcher
 ##### RM lets you visualize a Show/Sequence/Shot/Step/Version Structure (SSSSV)
 ##### RM launches Animation ( Toon Boom ) or Composition ( After Effects ) specific files.
 ##### RM creates SSSSV files from a template
@@ -31,7 +31,7 @@ ID,THUMBNAIL,NAME,VENDOR,COMP,STATUS,FRAME RANGE
 10114,,140,LAP,FEQU,APP,
 
 * will create sequence's files at Crying/010
-5.Use New button to create step/shots files from a '_template' located at set root
+5.Use New button to create step/shots files from a '_template' located at set root, ### will be replaced for shot name.
 eg= 
 shows\20210813_testproyect_2\2_PRODUCTION\03_ANIMATION\02_SEQ\_template
 6.Use New Button to create an incremental backup from current_version file
