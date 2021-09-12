@@ -61,6 +61,8 @@ if __name__ == '__main__':
     loadButton_ae = ui.loadButton_ae
     newTBButton = ui.newButton_tb
     newAEButton = ui.newButton_ae
+    tbRootPath = '/2_PRODUCTION/03_ANIMATION/02_SEQ/'
+    aeRootPath = '/2_PRODUCTION/03_ANIMATION/04_Compo/'
 
     # mrRudoManager starts here.
     # set SHOWs folder from environment variable -> os.getenv('FOO')
@@ -68,6 +70,8 @@ if __name__ == '__main__':
 
     # pipeline config.csv location
     dbroot = os.getenv("DBRP")
+    if (dbroot == None):
+        dbroot = '2_PRODUCTION/05_DB'
 
     # create scope variables for widget using
     configs = {}
@@ -271,8 +275,8 @@ if __name__ == '__main__':
         global showFolder 
         global selSeqName
         global selShotName
-        filePath = 	showroot + '/' + showFolder + '/2_PRODUCTION/03_ANIMATION/02_SEQ/' + selSeqName + '/' + selShotName + '/current_version/' + selShotName + ".xstage";
-        olderVersionsDirPath = 	showroot + '/' + showFolder + '/2_PRODUCTION/03_ANIMATION/02_SEQ/' + selSeqName + '/' + selShotName + '/older_versions/';
+        filePath = 	showroot + '/' + showFolder + tbRootPath + selSeqName + '/' + selShotName + '/current_version/' + selShotName + ".xstage";
+        olderVersionsDirPath = 	showroot + '/' + showFolder + tbRootPath + selSeqName + '/' + selShotName + '/older_versions/';
         if os.path.isfile(filePath):
             current = ['current_version']
             if os.path.isdir(olderVersionsDirPath):
@@ -288,8 +292,8 @@ if __name__ == '__main__':
         global showFolder 
         global selSeqName
         global selShotName
-        filePath = 	showroot + '/' + showFolder + '/2_PRODUCTION/03_ANIMATION/04_Compo/' + selSeqName + '/' + selShotName + '/current_version/' + selShotName + ".aep";
-        olderVersionsDirPath = 	showroot + '/' + showFolder + '/2_PRODUCTION/03_ANIMATION/04_Compo/' + selSeqName + '/' + selShotName + '/older_versions/';
+        filePath = 	showroot + '/' + showFolder + tbRootPath + selSeqName + '/' + selShotName + '/current_version/' + selShotName + ".aep";
+        olderVersionsDirPath = 	showroot + '/' + showFolder + aeRootPath + selSeqName + '/' + selShotName + '/older_versions/';
         if os.path.isfile(filePath):
             current = ['current_version']
             if os.path.isdir(olderVersionsDirPath):
@@ -317,13 +321,13 @@ if __name__ == '__main__':
     def newTBPressed():
         if (checkIfTBFileExist()[0] ):
             from shutil import copytree
-            src = showroot + '/' + showFolder + '/2_PRODUCTION/03_ANIMATION/02_SEQ/' + selSeqName + '/' + selShotName + '/current_version/'
+            src = showroot + '/' + showFolder + tbRootPath + selSeqName + '/' + selShotName + '/current_version/'
             version = ui.tbVersionsCB.currentText()
             if( version != 'current_version'):
                 new_version = str(int(checkIfTBFileExist()[1][-1])+1).zfill(3)
             else:
                 new_version = '001'
-            dst = showroot + '/' + showFolder + '/2_PRODUCTION/03_ANIMATION/02_SEQ/' + selSeqName + '/' + selShotName + '/older_versions/' + new_version
+            dst = showroot + '/' + showFolder + tbRootPath + selSeqName + '/' + selShotName + '/older_versions/' + new_version
             #print(src,dst)
             copytree(src, dst)
             populateShotsInfo(None)
@@ -333,7 +337,7 @@ if __name__ == '__main__':
             src = showroot + '/' + showFolder + '/2_PRODUCTION/03_ANIMATION/02_SEQ/_template'
             if os.path.isdir(src):
                 from shutil import copytree
-                dst = showroot + '/' + showFolder + '/2_PRODUCTION/03_ANIMATION/02_SEQ/' + selSeqName + '/' + selShotName + '/current_version/'
+                dst = showroot + '/' + showFolder + tbRootPath + selSeqName + '/' + selShotName + '/current_version/'
                 copytree(src, dst)
                 messageBox('new TB file was created for '+ selSeqName + '/' + selShotName+" from template")
                 for i in  os.listdir(dst):
@@ -347,13 +351,13 @@ if __name__ == '__main__':
     def newAEPressed():
         if (checkIfAEFileExist()[0]):
             from shutil import copytree
-            src = showroot + '/' + showFolder + '/2_PRODUCTION/03_ANIMATION/04_Compo/' + selSeqName + '/' + selShotName + '/current_version/'
+            src = showroot + '/' + showFolder + aeRootPath + selSeqName + '/' + selShotName + '/current_version/'
             version = ui.tbVersionsCB.currentText()
             if( version != 'current_version'):
                 new_version = str(int(checkIfTBFileExist()[1][-1])+1).zfill(3)
             else:
                 new_version = '001'
-            dst = showroot + '/' + showFolder + '/2_PRODUCTION/03_ANIMATION/04_Compo/' + selSeqName + '/' + selShotName + '/older_versions/' + new_version
+            dst = showroot + '/' + showFolder + aeRootPath + selSeqName + '/' + selShotName + '/older_versions/' + new_version
             copytree(src, dst)
             populateShotsInfo(None)
             messageBox('current AE version was backuped as ' + new_version)
@@ -362,7 +366,7 @@ if __name__ == '__main__':
             src = showroot + '/' + showFolder + '/2_PRODUCTION/03_ANIMATION/04_Compo/_template'
             if os.path.isdir(src):
                 from distutils.dir_util import copy_tree                
-                dst = showroot + '/' + showFolder + '/2_PRODUCTION/03_ANIMATION/04_Compo/' + selSeqName + '/' + selShotName + '/current_version/'
+                dst = showroot + '/' + showFolder + aeRootPath + selSeqName + '/' + selShotName + '/current_version/'
                 copy_tree(src, dst)
                 messageBox('new TB file was created for '+ selSeqName + '/' + selShotName+" from template")
                 for i in  os.listdir(dst):
@@ -375,17 +379,17 @@ if __name__ == '__main__':
     def openTBFile():
         version = ui.tbVersionsCB.currentText()
         if( version != 'current_version'):
-            filepath = showroot + '/' + showFolder + '/2_PRODUCTION/03_ANIMATION/02_SEQ/' + selSeqName + '/' + selShotName + '/older_versions/' + selShotName + ".xstage"
+            filepath = showroot + '/' + showFolder + tbRootPath + selSeqName + '/' + selShotName + '/older_versions/' + selShotName + ".xstage"
         else:
-            filepath = showroot + '/' + showFolder + '/2_PRODUCTION/03_ANIMATION/02_SEQ/' + selSeqName + '/' + selShotName + '/current_version/' + selShotName + ".xstage"
+            filepath = showroot + '/' + showFolder + tbRootPath + selSeqName + '/' + selShotName + '/current_version/' + selShotName + ".xstage"
         os.startfile(filepath)
 
     def openAEFile():
         version = ui.aeVersionsCB.currentText()
         if( version != 'current_version'):
-            filepath = showroot + '/' + showFolder + '/2_PRODUCTION/03_ANIMATION/04_Compo/' + selSeqName + '/' + selShotName + '/older_versions/' + selShotName + ".aep"
+            filepath = showroot + '/' + showFolder + aeRootPath + selSeqName + '/' + selShotName + '/older_versions/' + selShotName + ".aep"
         else:
-            filepath = showroot + '/' + showFolder + '/2_PRODUCTION/03_ANIMATION/04_Compo/' + selSeqName + '/' + selShotName + '/current_version/' + selShotName + ".aep"
+            filepath = showroot + '/' + showFolder + aeRootPath + selSeqName + '/' + selShotName + '/current_version/' + selShotName + ".aep"
         os.startfile(filepath)
 
     def messageBox(text):
