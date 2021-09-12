@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(['main.py'],
-             pathex=['C:\\Users\\andi\\Documents\\EmptyPyQtApp'],
+             pathex=['C:\\Users\\andi\\Documents\\RudoManager'],
              binaries=[],
              datas=[('mrToonBoom_mw.ui', '.'), ('mrToonBoom_prefs.ui', '.')],
              hiddenimports=[],
