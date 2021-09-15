@@ -5,13 +5,21 @@ from pathlib import Path
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
 from PyQt5.QtGui import QPalette
 from PyQt5 import uic
-from PyQt5.QtCore import QFile, QIODevice, QStringListModel
+from PyQt5.QtCore import QFile, QIODevice, QStringListModel, Qt
 
 class Ui(QMainWindow):
     def __init__(self, ui_path):
         super(Ui, self).__init__() # Call the inherited classes __init__ method
+        self.setFocusPolicy(Qt.StrongFocus)
         uic.loadUi(ui_path, self) # Load the .ui file
         self.show() # Show the GUI
+
+    def focusInEvent(self,event):
+        print('volvio')
+        self.setFocus(True)
+        self.activateWindow()
+        self.raise_()
+        self.show()
 
 class QD(QDialog):
 
@@ -49,7 +57,7 @@ class QD(QDialog):
 if __name__ == '__main__':
     # Some code to obtain the form file name, ui_file_name
     app = QApplication(sys.argv)
-    ui_file_path = os.fspath(Path(__file__).resolve().parent / "mrToonBoom_mw.ui")
+    ui_file_path = os.fspath(Path(__file__).resolve().parent / "RudoManager_mw.ui")
     ui = Ui(ui_file_path)
 
 #   create links to ui widgets
@@ -99,7 +107,7 @@ if __name__ == '__main__':
         return True
 
     def showPrefsDialog():
-        ui_file_path = os.fspath(Path(__file__).resolve().parent / "mrToonBoom_prefs.ui")
+        ui_file_path = os.fspath(Path(__file__).resolve().parent / "RudoManager_prefs.ui")
         qd = QD(ui_file_path)
         qd.exec_()
 
