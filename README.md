@@ -30,7 +30,7 @@ ID,THUMBNAIL,NAME,VENDOR,COMP,STATUS,FRAME RANGE
 10113,,130,LAP,FEQU,APP,
 10114,,140,LAP,FEQU,APP,
 
-* will create sequence's files at Crying/010
+will create sequence's files at Crying/010
 
 5.Use New button to create step/shots files from a '_template' located at set root, ### will be replaced for shot name.
 eg= 
