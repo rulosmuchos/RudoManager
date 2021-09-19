@@ -32,7 +32,7 @@ ID,THUMBNAIL,NAME,VENDOR,COMP,STATUS,FRAME RANGE
 
 will create sequence's files at Crying/010
 
-5.Use New button to create step/shots files from a '_template' located at set root, ### will be replaced for shot name.
+5.Use New button to create step/shots files from a '_template' located at step/department root, ### will be replaced for shot name.
 eg= 
 shows\20210813_testproyect_2\2_PRODUCTION\03_ANIMATION\02_SEQ\_template
 
