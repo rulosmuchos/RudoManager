@@ -2,7 +2,7 @@
 import os, sys, csv, subprocess #, pipes
 from pathlib import Path
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QFileDialog
 from PyQt5.QtGui import QPalette
 from PyQt5 import uic
 from PyQt5.QtCore import QFile, QIODevice, QStringListModel, Qt
@@ -15,7 +15,6 @@ class Ui(QMainWindow):
         self.show() # Show the GUI
 
     def focusInEvent(self,event):
-        print('volvio')
         self.setFocus(True)
         self.activateWindow()
         self.raise_()
@@ -26,12 +25,42 @@ class QD(QDialog):
     def __init__(self, ui_path):
         global showroot
         global dbroot
+        global messageBox
         super(QD, self).__init__() # Call the inherited classes __init__ method
         uic.loadUi(ui_path, self) # Load the .ui file
         self.rootPath.setText(showroot)
         self.dbRelativePath.setText(dbroot)
         self.buttonBox.accepted.connect( self.ok )
         self.buttonBox.rejected.connect( self.close )
+        self.rootBrowseButton.pressed.connect( self.browse )
+        self.dbBrowseButton.pressed.connect( self.dbBrowse )
+        print(showroot)
+            
+    def dbBrowse(self):
+        global showroot
+        global dbroot
+        global messageBox
+        dlg = QFileDialog()
+        dlg.setFileMode(QFileDialog.Directory)
+        _selDir = dlg.getExistingDirectory()
+        print(showroot, _selDir)
+        if (showroot not in _selDir):
+            messageBox("DB folder must be inside Show Root Folder!")
+        else:
+            _selDir = _selDir.replace(showroot,"")
+            _parts = _selDir.split("/")
+            del _parts[0]
+            del _parts[0]
+            _dbRelativePath = '/'.join(_parts)
+            self.dbRelativePath.setText(_dbRelativePath)
+
+    def browse(self):
+        global showroot
+        dlg = QFileDialog()
+        dlg.setFileMode(QFileDialog.Directory)
+        _selDir = dlg.getExistingDirectory()
+        showroot = _selDir
+        self.rootPath.setText(showroot)
 
     def ok(self):
         global showroot
@@ -152,6 +181,7 @@ if __name__ == '__main__':
                         obj = {}
                         row = arrr[j]
                         for k, m in enumerate(headers):
+                                print(k)
                                 obj[headers[k]] = row[k]
                         data.append(obj)
                 return (data)
@@ -160,9 +190,9 @@ if __name__ == '__main__':
     # explore into show root directory
     # dbdir = os.listdir(showroot)
     def populateShowList():
+        print(showroot)
         global list
         global config
-        global showroot
         global dbroot
         global showPrefsDialog
         list = []
@@ -268,6 +298,13 @@ if __name__ == '__main__':
             ui.aeVersionsCB.clear()
             ui.tbVersionsCB.addItems(checkIfTBFileExist()[1])
             ui.aeVersionsCB.addItems(checkIfAEFileExist()[1])
+            # load preview image on QLabel's pixmap property
+                        # label = QLabel(self)
+                        # pixmap = QPixmap('cat.jpg')
+                        # label.setPixmap(pixmap)
+                        # self.setCentralWidget(label)
+                        # self.resize(pixmap.width(), pixmap.height())
+                          
 
 
     def shotNotSelected():
@@ -332,7 +369,7 @@ if __name__ == '__main__':
             src = showroot + '/' + showFolder + tbRootPath + selSeqName + '/' + selShotName + '/current_version/'
             version = ui.tbVersionsCB.currentText()
             if( version != 'current_version'):
-                new_version = str(int(checkIfTBFileExist()[1][-1])+1).zfill(3)
+                new_version = str(int(checkIfTBFileExist()[1][-1])+1).zfill(3) # zfill function fills with (n) Zeros and returns a string
             else:
                 new_version = '001'
             dst = showroot + '/' + showFolder + tbRootPath + selSeqName + '/' + selShotName + '/older_versions/' + new_version

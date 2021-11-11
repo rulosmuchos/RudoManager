@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>383</width>
-    <height>275</height>
+    <width>719</width>
+    <height>212</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,8 +20,8 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>240</y>
-     <width>341</width>
+     <y>170</y>
+     <width>660</width>
      <height>32</height>
     </rect>
    </property>
@@ -37,7 +37,7 @@
     <rect>
      <x>100</x>
      <y>60</y>
-     <width>271</width>
+     <width>461</width>
      <height>20</height>
     </rect>
    </property>
@@ -50,7 +50,7 @@
     <rect>
      <x>100</x>
      <y>120</y>
-     <width>271</width>
+     <width>461</width>
      <height>20</height>
     </rect>
    </property>
@@ -105,6 +105,32 @@
    </property>
    <property name="text">
     <string>DB relative path</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="rootBrowseButton">
+   <property name="geometry">
+    <rect>
+     <x>580</x>
+     <y>60</y>
+     <width>110</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Browse...</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="dbBrowseButton">
+   <property name="geometry">
+    <rect>
+     <x>580</x>
+     <y>120</y>
+     <width>110</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Browse...</string>
    </property>
   </widget>
  </widget>
