@@ -2,11 +2,11 @@
 import os, sys, csv, subprocess #, pipes
 from pathlib import Path
 from PyQt5.QtMultimediaWidgets import QVideoWidget
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QFileDialog, QWidget, QLabel, QVBoxLayout
-from PyQt5.QtGui import QPalette, QPixmap
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QFileDialog, QLabel
+from PyQt5.QtGui import QPixmap
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer, QMediaPlaylist
 from PyQt5 import uic
-from PyQt5.QtCore import QFile, QIODevice, QStringListModel, Qt, QUrl
+from PyQt5.QtCore import QFile, QStringListModel, QUrl
 
 class Ui(QMainWindow):
     def __init__(self, ui_path):
@@ -81,8 +81,6 @@ class QD(QDialog):
                 dbroot = self.dbRelativePath.text()
                 exp = "setx DBRP %s" % dbroot
                 subprocess.Popen(exp, shell=True).wait()
-
-
             populateShowList()
 
 if __name__ == '__main__':
