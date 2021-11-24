@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>RudoManager 0.4.3a</string>
+   <string>RudoManager 0.4.9b</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="label_4">
@@ -46,7 +46,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>323</x>
+      <x>400</x>
       <y>310</y>
       <width>41</width>
       <height>23</height>
@@ -144,7 +144,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>324</x>
+      <x>401</x>
       <y>280</y>
       <width>41</width>
       <height>23</height>
@@ -255,7 +255,7 @@
      <string>Preview</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_9">
+   <widget class="QLabel" name="previewImgL">
     <property name="geometry">
      <rect>
       <x>750</x>
@@ -273,14 +273,11 @@
     <property name="text">
      <string/>
     </property>
-    <property name="pixmap">
-     <pixmap>npa.jpg</pixmap>
-    </property>
     <property name="scaledContents">
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QComboBox" name="tbVersionsCB_2">
+   <widget class="QComboBox" name="tbTemplatesCB">
     <property name="geometry">
      <rect>
       <x>450</x>
@@ -290,7 +287,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QComboBox" name="tbVersionsCB_3">
+   <widget class="QComboBox" name="aeTemplatesCB">
     <property name="geometry">
      <rect>
       <x>450</x>
@@ -303,14 +300,53 @@
    <widget class="QLabel" name="label_10">
     <property name="geometry">
      <rect>
-      <x>390</x>
-      <y>290</y>
-      <width>51</width>
+      <x>450</x>
+      <y>260</y>
+      <width>81</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>Template</string>
+     <string>Templates</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_11">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>260</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Versions</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_12">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>300</y>
+      <width>41</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Create</string>
+    </property>
+   </widget>
+   <widget class="QVideoWidget" name="QmediaPlayer" native="true">
+    <property name="geometry">
+     <rect>
+      <x>750</x>
+      <y>30</y>
+      <width>241</width>
+      <height>231</height>
+     </rect>
+    </property>
+    <property name="acceptDrops">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>
@@ -326,6 +362,14 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QVideoWidget</class>
+   <extends>QWidget</extends>
+   <header>PyQt5.QtMultimediaWidgets</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

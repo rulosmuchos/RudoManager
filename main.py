@@ -1,17 +1,22 @@
 # This Python file uses the following encoding: utf-8
 import os, sys, csv, subprocess #, pipes
 from pathlib import Path
-
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QFileDialog
-from PyQt5.QtGui import QPalette
+from PyQt5.QtMultimediaWidgets import QVideoWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QFileDialog, QWidget, QLabel, QVBoxLayout
+from PyQt5.QtGui import QPalette, QPixmap
+from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer, QMediaPlaylist
 from PyQt5 import uic
-from PyQt5.QtCore import QFile, QIODevice, QStringListModel, Qt
+from PyQt5.QtCore import QFile, QIODevice, QStringListModel, Qt, QUrl
 
 class Ui(QMainWindow):
     def __init__(self, ui_path):
         super(Ui, self).__init__() # Call the inherited classes __init__ method
         self.setFocusPolicy(Qt.StrongFocus)
         uic.loadUi(ui_path, self) # Load the .ui file
+        #self.QmediaPlayer.resize =(230,230)
+        self.mediaPlayer = QMediaPlayer(self)
+        self.mediaPlayer.setVideoOutput(self.QmediaPlayer)
+        self.QmediaPlayer.hide()
         self.show() # Show the GUI
 
     def focusInEvent(self,event):
@@ -80,61 +85,7 @@ class QD(QDialog):
 
             populateShowList()
 
-
-
-
 if __name__ == '__main__':
-    # Some code to obtain the form file name, ui_file_name
-    app = QApplication(sys.argv)
-    ui_file_path = os.fspath(Path(__file__).resolve().parent / "RudoManager_mw.ui")
-    ui = Ui(ui_file_path)
-
-#   create links to ui widgets
-    tv = ui.listView
-    tv2 = ui.listView_2
-    tv3 = ui.listView_3
-    tv4 = ui.listView_4
-    loadButton_tb = ui.loadButton_tb
-    loadButton_ae = ui.loadButton_ae
-    newTBButton = ui.newButton_tb
-    newAEButton = ui.newButton_ae
-    tbRootPath = '/2_PRODUCTION/03_ANIMATION/02_SEQ/'
-    aeRootPath = '/2_PRODUCTION/03_ANIMATION/04_Compo/'
-
-    # mrRudoManager starts here.
-    # set SHOWs folder from environment variable -> os.getenv('FOO')
-    showroot = os.getenv("SHOWS")
-
-    # pipeline config.csv location
-    dbroot = os.getenv("DBRP")
-    if (dbroot == None):
-        dbroot = '2_PRODUCTION/05_DB'
-
-    # create scope variables for widget using
-    configs = {}
-    list = []
-    slist = []
-    selShots = []
-    info = []
-    selSeqs = []
-    selSeqName = ""
-    filePath = ""
-    showFolder = ""
-
-    # QList Model creation
-    listModel = QStringListModel()
-    slistModel = QStringListModel()
-    shotListModel = QStringListModel()
-    shotInfoModel = QStringListModel()
-
-    # init 'Selected Shot Info' var
-    selShotInfo = ""
-    selShotName = ""
-
-    # freak var-watch event for selShotInfo javascript implementation for buttons enableing
-    def watchVar():
-        return True
-
     def showPrefsDialog():
         ui_file_path = os.fspath(Path(__file__).resolve().parent / "RudoManager_prefs.ui")
         qd = QD(ui_file_path)
@@ -279,6 +230,9 @@ if __name__ == '__main__':
 
 
     def populateShotsInfo(m):
+            global selSeqName
+            global selSeqs
+            global selShots
             global selShotInfo
             global selShotName
             global ui
@@ -298,15 +252,29 @@ if __name__ == '__main__':
             ui.aeVersionsCB.clear()
             ui.tbVersionsCB.addItems(checkIfTBFileExist()[1])
             ui.aeVersionsCB.addItems(checkIfAEFileExist()[1])
-            # load preview image on QLabel's pixmap property
-                        # label = QLabel(self)
-                        # pixmap = QPixmap('cat.jpg')
-                        # label.setPixmap(pixmap)
-                        # self.setCentralWidget(label)
-                        # self.resize(pixmap.width(), pixmap.height())
-                          
+            print(showroot+"/"+showFolder+tbRootPath+"_template")
+            print(showroot+"/"+showFolder+aeRootPath+"_template")
+            ui.tbTemplatesCB.clear()
+            ui.aeTemplatesCB.clear()
+            ui.tbTemplatesCB.addItems(os.listdir(showroot+"/"+showFolder+tbRootPath+"_template"))
+            ui.aeTemplatesCB.addItems(os.listdir(showroot+"/"+showFolder+aeRootPath+"_template"))
 
-
+            videoFile = showroot+"/"+showFolder+tbRootPath+selSeqName+"/"+selShotName+"/_preview.mov"
+            ui.QmediaPlayer.hide()
+            if ( os.path.isfile(videoFile) ):
+                playlist = QMediaPlaylist(ui.mediaPlayer)
+                url = QUrl.fromLocalFile(videoFile)
+                playlist.addMedia(QMediaContent(QUrl(url)))
+                playlist.setPlaybackMode(QMediaPlaylist.Loop)
+                ui.mediaPlayer.setPlaylist(playlist)
+                ui.QmediaPlayer.show()
+                ui.mediaPlayer.play()
+            
+            if (os.path.isfile(showroot+"/"+showFolder+tbRootPath+selSeqName+"/"+selShotName+"/_preview.jpg")):
+                ui.previewImgL.setPixmap(QPixmap(showroot+"/"+showFolder+tbRootPath+selSeqName+"/"+selShotName+"/_preview.jpg"))
+            else:
+                ui.previewImgL.clear()
+            
     def shotNotSelected():
         ui.loadButton_tb.setEnabled(False)
         ui.loadButton_ae.setEnabled(False)
@@ -314,6 +282,8 @@ if __name__ == '__main__':
         ui.newButton_ae.setEnabled(False)
         ui.tbVersionsCB.clear()
         ui.aeVersionsCB.clear()
+        ui.tbTemplatesCB.clear()
+        ui.aeTemplatesCB.clear()
 
     def checkIfTBFileExist():
         global showroot
@@ -372,7 +342,7 @@ if __name__ == '__main__':
                 new_version = str(int(checkIfTBFileExist()[1][-1])+1).zfill(3) # zfill function fills with (n) Zeros and returns a string
             else:
                 new_version = '001'
-            dst = showroot + '/' + showFolder + tbRootPath + selSeqName + '/' + selShotName + '/older_versions/' + new_version
+            dst = showroot + '/' + showFolder + tbRootPath + selSeqName + '/' + selShotName + '/older_versions/' + selSeqName + "_" + selShotName + "_" + new_version
             #print(src,dst)
             copytree(src, dst)
             populateShotsInfo(None)
@@ -444,6 +414,54 @@ if __name__ == '__main__':
         msg.setText(text)
         msg.setWindowTitle("Information")
         msg.exec_()
+    # Some code to obtain the form file name, ui_file_name
+    app = QApplication(sys.argv)
+    ui_file_path = os.fspath(Path(__file__).resolve().parent / "RudoManager_mw.ui")
+    ui = Ui(ui_file_path)
+
+    #   create links to ui widgets
+    tv = ui.listView
+    tv2 = ui.listView_2
+    tv3 = ui.listView_3
+    tv4 = ui.listView_4
+    loadButton_tb = ui.loadButton_tb
+    loadButton_ae = ui.loadButton_ae
+    newTBButton = ui.newButton_tb
+    newAEButton = ui.newButton_ae
+    #
+    #
+    tbRootPath = '/2_PRODUCTION/03_ANIMATION/02_SEQ/'
+    aeRootPath = '/2_PRODUCTION/03_ANIMATION/04_Compo/'
+
+    # mrRudoManager starts here.
+    # set SHOWs folder from environment variable -> os.getenv('FOO')
+    showroot = os.getenv("SHOWS")
+    print(showroot)
+    # pipeline config.csv location
+    dbroot = os.getenv("DBRP")
+    if (dbroot == None):
+        dbroot = '2_PRODUCTION/05_DB'
+    print(dbroot)
+    # create scope variables for widget using
+    configs = {}
+    list = []
+    slist = []
+    selShots = []
+    info = []
+    selSeqs = []
+    selSeqName = ""
+    filePath = ""
+    showFolder = ""
+
+    # QList Model creation
+    listModel = QStringListModel()
+    slistModel = QStringListModel()
+    shotListModel = QStringListModel()
+    shotInfoModel = QStringListModel()
+
+    # init 'Selected Shot Info' var
+    selShotInfo = ""
+    selShotName = ""
 
     from darktheme.widget_template import DarkPalette
     app.setStyle("Fusion")
