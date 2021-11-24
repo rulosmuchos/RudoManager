@@ -196,7 +196,12 @@ if __name__ == '__main__':
         selShowConfig = selShowConfig
         selSeqs = getSequences(selShowConfig)
         slist = selSeqs[1]
-        slistModel.setStringList(slist)
+        namelist = []
+        for i in slist:
+            print(i)
+            s = i.replace('.csv','')
+            namelist.append(s)
+        slistModel.setStringList(namelist)
         tv2.setModel(slistModel)
         #
         shotListModel.setStringList([])
