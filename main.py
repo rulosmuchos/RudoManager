@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QFileDialog, QLa
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer, QMediaPlaylist
 from PyQt5 import uic
-from PyQt5.QtCore import QFile, QStringListModel, QUrl
+from PyQt5.QtCore import QFile, QStringListModel, QUrl, Qt
 
 class Ui(QMainWindow):
     def __init__(self, ui_path):
@@ -39,7 +39,6 @@ class QD(QDialog):
         self.buttonBox.rejected.connect( self.close )
         self.rootBrowseButton.pressed.connect( self.browse )
         self.dbBrowseButton.pressed.connect( self.dbBrowse )
-        print(showroot)
             
     def dbBrowse(self):
         global showroot
@@ -48,7 +47,6 @@ class QD(QDialog):
         dlg = QFileDialog()
         dlg.setFileMode(QFileDialog.Directory)
         _selDir = dlg.getExistingDirectory()
-        print(showroot, _selDir)
         if (showroot not in _selDir):
             messageBox("DB folder must be inside Show Root Folder!")
         else:
@@ -130,7 +128,6 @@ if __name__ == '__main__':
                         obj = {}
                         row = arrr[j]
                         for k, m in enumerate(headers):
-                                print(k)
                                 obj[headers[k]] = row[k]
                         data.append(obj)
                 return (data)
@@ -139,7 +136,6 @@ if __name__ == '__main__':
     # explore into show root directory
     # dbdir = os.listdir(showroot)
     def populateShowList():
-        print(showroot)
         global list
         global config
         global dbroot
@@ -196,7 +192,6 @@ if __name__ == '__main__':
         slist = selSeqs[1]
         namelist = []
         for i in slist:
-            print(i)
             s = i.replace('.csv','')
             namelist.append(s)
         slistModel.setStringList(namelist)
@@ -255,8 +250,6 @@ if __name__ == '__main__':
             ui.aeVersionsCB.clear()
             ui.tbVersionsCB.addItems(checkIfTBFileExist()[1])
             ui.aeVersionsCB.addItems(checkIfAEFileExist()[1])
-            print(showroot+"/"+showFolder+tbRootPath+"_template")
-            print(showroot+"/"+showFolder+aeRootPath+"_template")
             ui.tbTemplatesCB.clear()
             ui.aeTemplatesCB.clear()
             ui.tbTemplatesCB.addItems(os.listdir(showroot+"/"+showFolder+tbRootPath+"_template"))
@@ -346,7 +339,6 @@ if __name__ == '__main__':
             else:
                 new_version = '001'
             dst = showroot + '/' + showFolder + tbRootPath + selSeqName + '/' + selShotName + '/older_versions/' + selSeqName + "_" + selShotName + "_" + new_version
-            #print(src,dst)
             copytree(src, dst)
             populateShotsInfo(None)
             messageBox('current TB version was backuped as ' + new_version)
@@ -439,12 +431,10 @@ if __name__ == '__main__':
     # mrRudoManager starts here.
     # set SHOWs folder from environment variable -> os.getenv('FOO')
     showroot = os.getenv("SHOWS")
-    print(showroot)
     # pipeline config.csv location
     dbroot = os.getenv("DBRP")
     if (dbroot == None):
         dbroot = '2_PRODUCTION/05_DB'
-    print(dbroot)
     # create scope variables for widget using
     configs = {}
     list = []
